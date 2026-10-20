@@ -1168,21 +1168,34 @@ document.addEventListener('visibilitychange',()=>{ if(started&&!document.hidden&
   const sixth = scene?.querySelector('#c6');
   if (!scene || !fourth || !fifth || !sixth) return;
 
-  let started = false;
+  let showFifth = false;
+  let showSixth = false;
+  let scheduled = false;
 
-  function revealLastTwo() {
-    if (started || !scene.classList.contains('on') ||
-        !fourth.classList.contains('on')) return;
+  function syncCards() {
+    if (!showFifth) fifth.classList.remove('on');
+    if (!showSixth) sixth.classList.remove('on');
 
-    started = true;
-    setTimeout(() => fifth.classList.add('on'), 950);
-    setTimeout(() => sixth.classList.add('on'), 1300);
+    if (!scheduled &&
+        scene.classList.contains('on') &&
+        fourth.classList.contains('on')) {
+      scheduled = true;
+      setTimeout(() => {
+        showFifth = true;
+        fifth.classList.add('on');
+      }, 950);
+      setTimeout(() => {
+        showSixth = true;
+        sixth.classList.add('on');
+      }, 1300);
+    }
   }
 
-  const observer = new MutationObserver(revealLastTwo);
-  observer.observe(scene, { attributes: true, attributeFilter: ['class'] });
-  observer.observe(fourth, { attributes: true, attributeFilter: ['class'] });
-  revealLastTwo();
+  const observer = new MutationObserver(syncCards);
+  for (const el of [scene, fourth, fifth, sixth]) {
+    observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+  }
+  syncCards();
 })();
 </script>
 
