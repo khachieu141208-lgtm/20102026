@@ -1163,22 +1163,25 @@ document.addEventListener('visibilitychange',()=>{ if(started&&!document.hidden&
 <script>
 (() => {
   const scene = document.getElementById('sc-unseen');
-  if (!scene) return;
+  const fourth = scene?.querySelector('#c4');
+  const fifth = scene?.querySelector('#c5');
+  const sixth = scene?.querySelector('#c6');
+  if (!scene || !fourth || !fifth || !sixth) return;
 
-  const fifth = scene.querySelector('#c5');
-  const sixth = scene.querySelector('#c6');
+  let started = false;
 
   function revealLastTwo() {
-    if (!scene.classList.contains('on')) return;
-    setTimeout(() => fifth.classList.add('on'), 1400);
-    setTimeout(() => sixth.classList.add('on'), 1750);
+    if (started || !scene.classList.contains('on') ||
+        !fourth.classList.contains('on')) return;
+
+    started = true;
+    setTimeout(() => fifth.classList.add('on'), 950);
+    setTimeout(() => sixth.classList.add('on'), 1300);
   }
 
-  new MutationObserver(revealLastTwo).observe(scene, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-
+  const observer = new MutationObserver(revealLastTwo);
+  observer.observe(scene, { attributes: true, attributeFilter: ['class'] });
+  observer.observe(fourth, { attributes: true, attributeFilter: ['class'] });
   revealLastTwo();
 })();
 </script>
