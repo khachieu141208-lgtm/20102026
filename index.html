@@ -1162,44 +1162,7 @@ document.addEventListener('visibilitychange',()=>{ if(started&&!document.hidden&
   }).observe(fin,{attributes:true,attributeFilter:['class']});
 })();
 </script>
-<script>
-(() => {
-  const scene = document.getElementById('sc-unseen');
-  const fourth = scene?.querySelector('#c4');
-  const fifth = scene?.querySelector('#c5');
-  const sixth = scene?.querySelector('#c6');
-  if (!scene || !fourth || !fifth || !sixth) return;
-
-  let showFifth = false;
-  let showSixth = false;
-  let scheduled = false;
-
-  function syncCards() {
-    if (!showFifth) fifth.classList.remove('on');
-    if (!showSixth) sixth.classList.remove('on');
-
-    if (!scheduled &&
-        scene.classList.contains('on') &&
-        fourth.classList.contains('on')) {
-      scheduled = true;
-      setTimeout(() => {
-        showFifth = true;
-        fifth.classList.add('on');
-      }, 950);
-      setTimeout(() => {
-        showSixth = true;
-        sixth.classList.add('on');
-      }, 1300);
-    }
-  }
-
-  const observer = new MutationObserver(syncCards);
-  for (const el of [scene, fourth, fifth, sixth]) {
-    observer.observe(el, { attributes: true, attributeFilter: ['class'] });
-  }
-  syncCards();
-})();
-</script>
+const scene = document.getElementById('sc-unseen');
 
 </body>
 </html>
